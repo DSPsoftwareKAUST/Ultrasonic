@@ -84,9 +84,13 @@ FullComplete = 1;
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-#define DAC_NUM_Samples_Ch1 20159											// Number of samples in file 1
-#define DAC_NUM_Samples_Ch2 20159											// Number of samples in file 2 
-#define POWER_WIN_LEN 100
+#define DAC_NUM_Samples_Ch1 9125											// Number of samples in file 1
+#define DAC_NUM_Samples_Ch2 9125											// Number of samples in file 2 
+#define POWER_WIN_LEN 1000
+
+int32_t offset=0;
+
+
 char formattedSignal_Ch1[6*DAC_NUM_Samples_Ch1]; 			// Formatted signal ( ASCII) read from the SD Card 
 //char formattedSignal_Ch2[6*DAC_NUM_Samples_Ch2]; 
 
@@ -94,7 +98,7 @@ uint32_t Tx_Signal_Ch1[DAC_NUM_Samples_Ch1];					// Transmitted Signal after con
 uint32_t Tx_Signal_Ch2[DAC_NUM_Samples_Ch2];	
 
 
-uint32_t ADC_Buffer[POWER_WIN_LEN];
+int32_t ADC_Buffer[POWER_WIN_LEN];
 
 
 // These variables to work with FAT file system
@@ -176,23 +180,22 @@ if(f_mount(&fatfs1,SD_Path,1)==FR_OK){
 }
 	
 
-	/*
-  HAL_GPIO_WritePin(GPIOG,GPIO_PIN_12,GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOG,GPIO_PIN_12,GPIO_PIN_RESET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOG,GPIO_PIN_12,GPIO_PIN_SET);
-	HAL_Delay(100);
-	HAL_GPIO_WritePin(GPIOG,GPIO_PIN_12,GPIO_PIN_RESET);
-	HAL_Delay(500);	
-*/
 
-
-
+HAL_Delay(25);
 
 //BB treshold detector !!!!!
+for(uint16_t i=0;i<100;i++)
+{
+	
+	HAL_ADC_Start(&hadc1);
+	HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);
+	offset = offset + HAL_ADC_GetValue(&hadc1);
+	HAL_Delay(5);
+}
+offset = offset/100;
 
-uint32_t value=0,treshold=350000;
+
+int32_t value=0,treshold=15000;
 uint16_t f_element=0,l_element=1;
 
 for(uint32_t i=0;i<POWER_WIN_LEN;i++)ADC_Buffer[i]=0;
@@ -202,19 +205,21 @@ for(uint32_t i=0;i<POWER_WIN_LEN;i++)ADC_Buffer[i]=0;
 	HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);
 	HAL_ADC_GetValue(&hadc1);
 
+HAL_GPIO_WritePin(GPIOG,GPIO_PIN_13,GPIO_PIN_RESET);
+
 while(value < treshold)
 {
 	HAL_GPIO_TogglePin(GPIOG,GPIO_PIN_13);
 	
-	uint16_t ADC_val;
+	int32_t ADC_val;
 	
 	HAL_ADC_Start(&hadc1);
 	HAL_ADC_PollForConversion(&hadc1, 0xFFFFFFFF);
-	ADC_val=HAL_ADC_GetValue(&hadc1);
+	ADC_val=(int32_t)HAL_ADC_GetValue(&hadc1) - offset;
 
 	
 	ADC_Buffer[f_element]=ADC_val;
-	value = value + ADC_Buffer[f_element]-ADC_Buffer[l_element];
+	value = abs((int)(value + ADC_Buffer[f_element]-ADC_Buffer[l_element]));
 	
 	f_element++;
 	f_element = f_element%POWER_WIN_LEN;
@@ -223,45 +228,25 @@ while(value < treshold)
 	l_element = l_element%POWER_WIN_LEN;
 }
 
- 
-//HAL_Delay(100);
-
-
 HAL_GPIO_WritePin(GPIOG,GPIO_PIN_13,GPIO_PIN_SET);
-	HAL_Delay(50);
+	/*HAL_Delay(50);
 	HAL_GPIO_WritePin(GPIOG,GPIO_PIN_13,GPIO_PIN_RESET);
 	HAL_Delay(50);
 	HAL_GPIO_WritePin(GPIOG,GPIO_PIN_13,GPIO_PIN_SET);
 	HAL_Delay(50);
 	HAL_GPIO_WritePin(GPIOG,GPIO_PIN_13,GPIO_PIN_RESET);
-	HAL_Delay(50);	
+	HAL_Delay(50);	*/
 	
-	
-	
-	//BB
-DMA1_Stream5->CR &= ~(DMA_SxCR_HTIE);
-DMA1_Stream6->CR &= ~(DMA_SxCR_HTIE);
-DMA1_Stream5->CR |= (DMA_SxCR_TCIE);
-DMA1_Stream6->CR |= (DMA_SxCR_TCIE);
+
 NVIC_EnableIRQ(DMA1_Stream5_IRQn);
 NVIC_EnableIRQ(DMA1_Stream6_IRQn);
 
-
 HAL_TIM_Base_Start(&htim4);																																			// Start timer 4 
-HAL_TIM_Base_Start(&htim5);
-HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_2);
-HAL_TIM_Base_Start(&htim2);
-HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
 
-
-
-HAL_Delay(2);
+//HAL_Delay(2);
 HAL_DAC_Start_DMA(&hdac,DAC_CHANNEL_1,Tx_Signal_Ch1,DAC_NUM_Samples_Ch1,DAC_ALIGN_12B_R);				// Transmit Signal 1
 HAL_DAC_Start_DMA(&hdac,DAC_CHANNEL_2,Tx_Signal_Ch2,DAC_NUM_Samples_Ch2,DAC_ALIGN_12B_R);				// Transmit Signal 2
 
-
-
-	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -273,7 +258,7 @@ HAL_DAC_Start_DMA(&hdac,DAC_CHANNEL_2,Tx_Signal_Ch2,DAC_NUM_Samples_Ch2,DAC_ALIG
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
+  
   }
   /* USER CODE END 3 */
 

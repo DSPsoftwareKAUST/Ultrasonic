@@ -199,30 +199,6 @@ void SysTick_Handler(void)
 void DMA1_Stream5_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Stream5_IRQn 0 */
-		//BB
-	if(DMA1->HISR&(DMA_HISR_TCIF5)){
-	HAL_GPIO_TogglePin(GPIOG,GPIO_PIN_12);
-}
-	if(DMA1->HISR&(DMA_HISR_TCIF5))
-	{
-		TIM2->CNT = 0;
-		TIM5->CNT = 0;
-		
-		
-		//BB
-		TIM5->CCMR1 &= ~((TIM_CCMR1_OC2M_0)|(TIM_CCMR1_OC2M_1)|(TIM_CCMR1_OC2M_2));
-		TIM5->CCMR1 |= ((TIM_CCMR1_OC2M_1)|(TIM_CCMR1_OC2M_2));
-		//BB
-		TIM2->CCMR2 &= ~((TIM_CCMR2_OC3M_0)|(TIM_CCMR2_OC3M_1)|(TIM_CCMR2_OC3M_2));
-		TIM2->CCMR2 |= ((TIM_CCMR2_OC3M_1)|(TIM_CCMR2_OC3M_2));		
-		
-	//BB
-		DMA1->HIFCR |= (DMA_HIFCR_CTCIF5);
-		DMA1_Stream5->CR |= (DMA_SxCR_TCIE);
-
-	}
-
-
   /* USER CODE END DMA1_Stream5_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_dac1);
   /* USER CODE BEGIN DMA1_Stream5_IRQn 1 */
@@ -236,25 +212,6 @@ void DMA1_Stream5_IRQHandler(void)
 void DMA1_Stream6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Stream6_IRQn 0 */
-
-
-	if(DMA1->HISR&(DMA_HISR_TCIF6))
-	{
-		TIM2->CNT = 0;
-		TIM5->CNT = 0;
-		
-		//BB
-		TIM5->CCMR1 &= ~((TIM_CCMR1_OC2M_0)|(TIM_CCMR1_OC2M_1)|(TIM_CCMR1_OC2M_2));
-		TIM5->CCMR1 |= ((TIM_CCMR1_OC2M_1)|(TIM_CCMR1_OC2M_2));
-		//BB
-		TIM2->CCMR2 &= ~((TIM_CCMR2_OC3M_0)|(TIM_CCMR2_OC3M_1)|(TIM_CCMR2_OC3M_2));
-		TIM2->CCMR2 |= ((TIM_CCMR2_OC3M_1)|(TIM_CCMR2_OC3M_2));		
-		
-	//BB
-		DMA1->HIFCR |= (DMA_HIFCR_CTCIF6);
-		DMA1_Stream6->CR |= (DMA_SxCR_TCIE);
-
-	}
 	
   /* USER CODE END DMA1_Stream6_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_dac2);
