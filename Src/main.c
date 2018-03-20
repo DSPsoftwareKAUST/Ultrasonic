@@ -84,15 +84,15 @@ FullComplete = 1;
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-#define DAC_NUM_Samples_Ch1 9125											// Number of samples in file 1
-#define DAC_NUM_Samples_Ch2 9125											// Number of samples in file 2 
+#define DAC_NUM_Samples_Ch1 9126											// Number of samples in file 1
+#define DAC_NUM_Samples_Ch2 100											// Number of samples in file 2 
 #define POWER_WIN_LEN 1000
 
 int32_t offset=0;
 
 
 char formattedSignal_Ch1[6*DAC_NUM_Samples_Ch1]; 			// Formatted signal ( ASCII) read from the SD Card 
-//char formattedSignal_Ch2[6*DAC_NUM_Samples_Ch2]; 
+char formattedSignal_Ch2[6*DAC_NUM_Samples_Ch2]; 
 
 uint32_t Tx_Signal_Ch1[DAC_NUM_Samples_Ch1];					// Transmitted Signal after conversion to HEX 
 uint32_t Tx_Signal_Ch2[DAC_NUM_Samples_Ch2];	
@@ -151,12 +151,12 @@ int main(void)
 if(f_mount(&fatfs1,SD_Path,1)==FR_OK){
 	
 			f_open(&file1,"Tx1.txt",FA_READ); 																							
-			f_read(&file1,formattedSignal_Ch1,6*DAC_NUM_Samples_Ch1,&testByte1);
+			f_read(&file1,formattedSignal_Ch1,6*DAC_NUM_Samples_Ch1 - 2,&testByte1);
 			f_close(&file1);
 
 	// Convert ASCII formatted signal to HEX
 	
-	if((6*DAC_NUM_Samples_Ch1)==testByte1){
+	if((6*DAC_NUM_Samples_Ch1-2)==testByte1){
 	for(int i=0;i<=DAC_NUM_Samples_Ch1;i++){
 	Tx_Signal_Ch1[i]=1000*(formattedSignal_Ch1[6*i]-48)+
 	100*(formattedSignal_Ch1[6*i+1]-48)+10*(formattedSignal_Ch1[6*i+2]-48)+
@@ -169,11 +169,11 @@ if(f_mount(&fatfs1,SD_Path,1)==FR_OK){
 
 	
 			f_open(&file2,"Tx2.txt",FA_READ);
-			f_read(&file2,formattedSignal_Ch1,6*DAC_NUM_Samples_Ch2,&testByte2);
+			f_read(&file2,formattedSignal_Ch1,6*DAC_NUM_Samples_Ch2-2,&testByte2);
 			f_close(&file2);
 
 // Convert ASCII formatted signal to HEX
-	if((6*DAC_NUM_Samples_Ch2)==testByte2){
+	if((6*DAC_NUM_Samples_Ch2-2)==testByte2){
 	for(int i=0;i<=DAC_NUM_Samples_Ch2;i++){
 	Tx_Signal_Ch2[i]=1000*(formattedSignal_Ch1[6*i]-48)+100*(formattedSignal_Ch1[6*i+1]-48)+10*(formattedSignal_Ch1[6*i+2]-48)+1*(formattedSignal_Ch1[6*i+3]-48);
 }
