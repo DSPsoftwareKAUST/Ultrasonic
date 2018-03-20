@@ -36,6 +36,7 @@ dac_fs96\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sd.h
 dac_fs96\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_sdmmc.h
 dac_fs96\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 dac_fs96\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
+dac_fs96\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 dac_fs96\main.o: ../Inc/adc.h
 dac_fs96\main.o: ../Inc/dac.h
 dac_fs96\main.o: ../Inc/dma.h

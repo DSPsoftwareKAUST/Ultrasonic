@@ -919,8 +919,8 @@ ARM Macro Assembler    Page 15
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=dac_fs96\startup_stm32f469xx.d -odac_fs96\startup_stm32f469xx.o
- -I.\RTE\_DAC_fs96 -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.2.0\CMSIS\Include -IC:\Kei
-l_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Inclu
+ -I.\RTE\_DAC_fs96 -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include -IC:\Kei
+l_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.12.0\Drivers\CMSIS\Device\ST\STM32F4xx\Inclu
 de --predefine="__EVAL SETA 1" --predefine="__MICROLIB SETA 1" --predefine="__U
 VISION_VERSION SETA 524" --predefine="_RTE_ SETA 1" --predefine="STM32F469xx SE
 TA 1" --list=startup_stm32f469xx.lst startup_stm32f469xx.s

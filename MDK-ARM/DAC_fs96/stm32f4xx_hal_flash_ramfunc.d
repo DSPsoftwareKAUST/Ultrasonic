@@ -3,6 +3,7 @@ dac_fs96\stm32f4xx_hal_flash_ramfunc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm3
 dac_fs96\stm32f4xx_hal_flash_ramfunc.o: ../Inc/stm32f4xx_hal_conf.h
 dac_fs96\stm32f4xx_hal_flash_ramfunc.o: ../Inc/main.h
 dac_fs96\stm32f4xx_hal_flash_ramfunc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
+dac_fs96\stm32f4xx_hal_flash_ramfunc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 dac_fs96\stm32f4xx_hal_flash_ramfunc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
 dac_fs96\stm32f4xx_hal_flash_ramfunc.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h
 dac_fs96\stm32f4xx_hal_flash_ramfunc.o: ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
